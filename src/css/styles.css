@@ -1,0 +1,36 @@
+/* styles.css */
+.flip-enter {
+    transform: rotateY(90deg);
+  }
+  .flip-enter-active {
+    transform: rotateY(0);
+    transition: transform 500ms ease-in-out;
+  }
+  .flip-exit {
+    transform: rotateY(0);
+  }
+  .flip-exit-active {
+    transform: rotateY(-90deg);
+    transition: transform 500ms ease-in-out;
+  }
+  
+  .fade-enter {
+    opacity: 0;
+  }
+  .fade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in-out;
+  }
+  .fade-exit {
+    opacity: 1;
+  }
+  .fade-exit-active {
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
+  }
+  
+  .flip-image {
+    transform: rotateY(180deg);
+    transition: transform 500ms ease-in-out;
+  }
+  
