@@ -31,7 +31,11 @@ const Auth = ({ setUser }) => {
       if (data.token) {
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user[0]));
+        localStorage.setItem('login', JSON.stringify(data));
         setUser(data.user[0]);
+        
+        console.log("data:",data);
+        
         showPopup('Login successful', 'success');
         navigate('/dashboard', { replace: true });
       } else {
