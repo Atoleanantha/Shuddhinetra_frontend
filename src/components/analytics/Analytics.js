@@ -393,11 +393,5 @@ export const Analytics = ({ user }) => {
 
 
 
-/*export const Analytics = () => {
-  return (
-    <div>Analytics</div>
-  )
-}
-*/
 
 

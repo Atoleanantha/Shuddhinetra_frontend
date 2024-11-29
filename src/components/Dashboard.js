@@ -16,6 +16,7 @@ import logo from '../assets/logo.webp';
 
 import Typography from '@mui/material/Typography';
 import { Container, Grid2 } from '@mui/material';
+import EventManagement from './events/EventManagement';
 
 const BRANDING = {
   title: 'Shuddhi Netra',
@@ -48,16 +49,14 @@ export default function DashboardLayoutBasic({ user, onLogout }) {
 
   }, [])
 
-  //Dashbord components
-
-  const Integrations = () => <h2>Integrations Content</h2>;
+  
   const Settings = () => <h2>Settings Content</h2>;
 
 
   const NAVIGATION = [
     { kind: 'header', title: 'Main items' },
     { segment: 'home', title: 'Home', icon: <DashboardIcon />, action: () => navigate('/home') },
-    { segment: 'integrations', title: 'Integrations', icon: <LayersIcon />, action: () => navigate('/integrations') },
+    { segment: 'eventmanagement', title: 'Event Management', icon: <LayersIcon />, action: () => navigate('/eventmanagement') },
     { segment: 'analytics', title: 'Analytics', icon: <AnalyticsIcon />, action: () => navigate('/analytics') },
     { segment: 'settings', title: 'Settings', icon: <SettingsIcon />, action: () => navigate('/settings') },
     { kind: 'header', title: `Welcome, ${user?.username || 'Guest'}` },
@@ -111,7 +110,7 @@ export default function DashboardLayoutBasic({ user, onLogout }) {
         <PageContainer>
           <Routes>
             <Route path="/home" element={<Home user={user} />} />
-            <Route path="/integrations" element={<Integrations />} />
+            <Route path="/eventmanagement" element={<EventManagement />} />
             <Route path="/analytics" element={<Analytics user={user} />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/logout" element={<Logout onLogout={handleLogout} />} />

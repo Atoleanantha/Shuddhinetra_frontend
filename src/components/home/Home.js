@@ -13,13 +13,17 @@ import Badge from '@mui/material/Badge';
 import Notification from './Notification';
 import PostOfficeGridList from './PostOfficeGridList';
 import axios from 'axios';
+import CleaningStaffGrid from './CleaningStaffGrid';
 
 
 const Home = ({ user }) => {
   const [postOffices, setPostOffice] = useState([])
+ 
+
   const [notifications, setNotifications] = useState([])
   const [token, setToken] = useState(localStorage.getItem("authToken"))
-  const [login, setLogin] = useState(localStorage.getItem('login'))
+  const [login, setLogin] = useState(JSON.parse(localStorage.getItem('login')))
+  const [is_divisional,setIsDivisional]=useState(login?.is_sub_divisional || null)
 
   const addSubPostOffice = async () => {
 
@@ -63,6 +67,7 @@ const Home = ({ user }) => {
   
   
   useEffect(() => {
+    setIsDivisional(login.is_divisional)
     fetchCleaningStaff();
   }, []);
 
@@ -85,11 +90,24 @@ const Home = ({ user }) => {
         console.error(error);
       });
   }
+  useEffect(()=>{
+    
+    fetchNotifications()
+    const intervalId = setInterval(() => {
+      fetchNotifications();
+    }, 30000); // 30,000 milliseconds = 30 seconds
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(intervalId);
+    
+  },[user, token])
+
   useEffect(() => {
     const newToken = localStorage.getItem("authToken")
     setToken(newToken)
-    fetchNotifications()
-    fetchCleaningStaff()
+    if(login.is_sub_divisional){
+      fetchCleaningStaff()
+    }
   }, [user, token])
 
   useEffect(() => {
@@ -188,7 +206,7 @@ const Home = ({ user }) => {
       {/* Display fetched post offices or a message if no data */}
       <Grid container spacing={2}>
         {/* First Column: Post Offices List */}
-        {login.is_divisional ?
+        {is_divisional?
           <Grid item xs={12} sm={12} md={8} size={8}>
             <div
               style={{
@@ -212,7 +230,31 @@ const Home = ({ user }) => {
               {/* Post Offices List */}
               <PostOfficeGridList postOffices={postOffices} />
             </div>
-          </Grid> : ""
+          </Grid>
+          :<Grid item xs={12} sm={12} md={8} size={8}>
+            <div
+              style={{
+                border: '1px solid #ccc',
+                padding: '16px',
+                borderRadius: '8px',
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                width: '100%', // Ensure it fills the grid column
+
+              }}
+            >
+              <Typography variant="h5" sx={{ marginBottom: 2, display: 'flex', alignItems: 'center' }}>
+                <Badge color="error" variant="dot" overlap='circular' badgeContent="  " anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}>
+                  <ListIcon sx={{ marginRight: 1 }} />
+                </Badge>
+                Cleaning Staff
+              </Typography>
+              {/* Post Offices List */}
+             <CleaningStaffGrid/>
+            </div>
+          </Grid> 
         }
 
 
