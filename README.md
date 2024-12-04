@@ -2,6 +2,7 @@ git remote add origin https://github.com/Atoleanantha/Shuddhinetra_frontend.git
 git branch -M main
 git push -u origin main
 
+git push -u origin phase2-events
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -12,6 +12,7 @@ export const postDataApi = async (endpoint, data, config = {}) => {
     throw error;
   }
 };
+
 export const getDataApi = async (endpoint, data, config = {}) => {
   try {
     // If you have query parameters (e.g., `data`), they should be passed in the `params` field of the `config`
@@ -25,6 +26,7 @@ export const getDataApi = async (endpoint, data, config = {}) => {
   }
 };
 
+
 export const getApi = async (endpoint, config = {}) => {
   try {
     // If you have query parameters (e.g., `data`), they should be passed in the `params` field of the `config`
@@ -35,6 +37,24 @@ export const getApi = async (endpoint, config = {}) => {
   }
 };
 
+export const addCleaningStaff = async (data) => {
+  const token = localStorage.getItem('authToken')
+  const config = {
+    headers: {
+      Authorization: `Token ${token}`, // Ensure token is valid
+    },
+  };
+
+
+  try {
+    const res = await axios.post("http://127.0.0.1:8000/api/v1/waste-management/cleaning-staff/",data, config);
+    console.log("added succesfully Cleaning Staff:", res.data);
+    return res
+  } catch (error) {
+    console.error("Error adding cleaning staff:", error.response || error.message);
+    return error
+  }
+};
 
 export const fetchCleaningStaff = async () => {
   const token = localStorage.getItem('authToken')
@@ -44,16 +64,18 @@ export const fetchCleaningStaff = async () => {
     },
   };
 
+
   try {
-    const res = await axios.get("http://127.0.0.1:8000/api/v1/waste-management/cleaning-staff", config);
+    const res = await axios.get("http://127.0.0.1:8000/api/v1/waste-management/cleaning-staff/", config);
     console.log("Cleaning Staff:", res.data);
-    // setPostOffice(res.data); // Update the state with fetched data
+   
     return res
   } catch (error) {
     console.error("Error fetching cleaning staff:", error.response || error.message);
     return error
   }
 };
+
 
 export const deleteCleaningStaff = async (id) => {
   const token = localStorage.getItem('authToken')
@@ -75,6 +97,7 @@ export const deleteCleaningStaff = async (id) => {
 };
 
 
+
 export const addEventReport = async (data) => {
 
   const token = localStorage.getItem("authToken");
@@ -93,6 +116,8 @@ export const addEventReport = async (data) => {
   }
 };
 
+
+
 export const addEvent = async (data) => {
   const token = localStorage.getItem("authToken");
   // const formData = new FormData();
@@ -100,9 +125,9 @@ export const addEvent = async (data) => {
   // // Append all fields from data to FormData
   
 
-  Object.keys(data).forEach((key) => {
-    console.log("file:",data[key]);
-  });
+  for (const [key, value] of data.entries()) {
+    console.log(`${key}: ${value}`);
+  }
 
   const config = {
     headers: {

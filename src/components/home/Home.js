@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import { Divider } from '@mui/material';
 import NotificationIcon from '@mui/icons-material/NotificationImportantOutlined';
 import ListIcon from '@mui/icons-material/ListAltOutlined';
-import { getDataApi, postDataApi ,fetchCleaningStaff} from '../../services/apiService'
+import { getDataApi, postDataApi ,fetchCleaningStaff, deleteCleaningStaff} from '../../services/apiService'
 import Badge from '@mui/material/Badge';
 import Notification from './Notification';
 import PostOfficeGridList from './PostOfficeGridList';
@@ -18,7 +18,7 @@ import CleaningStaffGrid from './CleaningStaffGrid';
 
 const Home = ({ user }) => {
   const [postOffices, setPostOffice] = useState([])
- 
+  const [loading,setLoading]=useState(false)
 
   const [notifications, setNotifications] = useState([])
   const [token, setToken] = useState(localStorage.getItem("authToken"))
@@ -68,7 +68,7 @@ const Home = ({ user }) => {
   
   useEffect(() => {
     setIsDivisional(login.is_divisional)
-    fetchCleaningStaff();
+  
   }, []);
 
   const fetchNotifications = async () => {
@@ -101,15 +101,7 @@ const Home = ({ user }) => {
     // return () => clearInterval(intervalId);
     
   },[user, token])
-
-  useEffect(() => {
-    const newToken = localStorage.getItem("authToken")
-    setToken(newToken)
-    if(login.is_sub_divisional){
-      fetchCleaningStaff()
-    }
-  }, [user, token])
-
+  
   useEffect(() => {
     const newToken = localStorage.getItem("authToken")
 
@@ -251,8 +243,8 @@ const Home = ({ user }) => {
                 </Badge>
                 Cleaning Staff
               </Typography>
-              {/* Post Offices List */}
-             <CleaningStaffGrid/>
+            
+             <CleaningStaffGrid token={token} setToken={setToken} login={login} user={user}/>
             </div>
           </Grid> 
         }

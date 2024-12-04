@@ -143,15 +143,14 @@ const EventManagement = () => {
     data.append("pincode", login?.user?.pincode);
     console.log(data.has("attachment"));
     // Log all key-value pairs in the FormData
-    for (const [key, value] of data.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+
 
 
 
     try {
       setLoading(true);
       const res = await addEvent(data); // Ensure `addEvent` supports `FormData`
+
       console.log("New event response:", res);
       setGrDetails({ grTitle: "", grDescription: "" });
       setGrFile(null);
@@ -586,8 +585,9 @@ const EventManagement = () => {
                 {/* //we have to add pincode */}
                 <TableCell>
                   <a
-                    href={"event.attachment"}
-                    download={event.attachment.name}
+                    target="_blank"
+                    href={event.attachment}  // URL from Cloudinary or your server
+                    download={event.attachment.split('/').pop()}  // Extract the file name from URL
                   >
                     Download
                   </a>
