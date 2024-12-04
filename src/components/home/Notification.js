@@ -18,6 +18,7 @@ import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
 import SaveIcon from '@mui/icons-material/Save';
 import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress
+import { format } from "date-fns";
 
 function Notification({ notification }) {
   const [open, setOpen] = React.useState(false);
@@ -131,6 +132,16 @@ function Notification({ notification }) {
     };
 
 
+    function cleanImageUrl(imageUrl) {
+      const prefix = "http://127.0.0.1:8000/media/https%3A/";
+      if (imageUrl.startsWith(prefix)) {
+          // Remove the unwanted prefix
+          return imageUrl.replace(prefix, "https://");
+      }
+      // Return the original URL if no prefix found
+      return imageUrl;
+  }
+  
     return (
       <React.Fragment>
         <Dialog
@@ -206,7 +217,7 @@ function Notification({ notification }) {
                 }}
               >
                 <img
-                  src={notification.image}
+                  src={cleanImageUrl(notification.image)}
                   alt={'Beautiful scenery'}
                   loading="lazy"
                   style={{
@@ -236,7 +247,7 @@ function Notification({ notification }) {
                   <strong>Address:</strong> {notification.address}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Date:</strong> {notification.createdAt}
+                  <strong>Date:</strong> {format(new Date(notification.createdAt), "MMMM dd, yyyy hh:mm:ss a 'UTC'")}
                 </Typography>
                 <Typography variant="body1">
                   <strong>Resolved:</strong>{(!actionPerformed && isSubDivisional) ? "None, You can resolve it" : "Not Resolved"}
@@ -294,6 +305,9 @@ function Notification({ notification }) {
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
             Address: {notification.pincode || 'Not Available'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
+            Date & Time: {format(new Date(notification.createdAt), "MMMM dd, yyyy hh:mm:ss a 'UTC'") || 'Not Available'}
           </Typography>
           <Divider sx={{ marginY: 1 }} />
           <Grid2 container direction="row" justifyContent="space-between">

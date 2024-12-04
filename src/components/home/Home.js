@@ -93,12 +93,12 @@ const Home = ({ user }) => {
   useEffect(()=>{
     
     fetchNotifications()
-    const intervalId = setInterval(() => {
-      fetchNotifications();
-    }, 30000); // 30,000 milliseconds = 30 seconds
+    // const intervalId = setInterval(() => {
+    //   fetchNotifications();
+    // }, 30000); // 30,000 milliseconds = 30 seconds
 
     // Cleanup the interval on component unmount
-    return () => clearInterval(intervalId);
+    // return () => clearInterval(intervalId);
     
   },[user, token])
 
@@ -312,7 +312,6 @@ const Home = ({ user }) => {
                   }}
                 >
                   <Notification
-
                     notification={notification}
                   />
                 </div>

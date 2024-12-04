@@ -92,23 +92,38 @@ export const addEventReport = async (data) => {
     throw error;
   }
 };
-export const addEvent = async (data) => {
 
+export const addEvent = async (data) => {
   const token = localStorage.getItem("authToken");
+  // const formData = new FormData();
+
+  // // Append all fields from data to FormData
+  
+
+  Object.keys(data).forEach((key) => {
+    console.log("file:",data[key]);
+  });
+
   const config = {
     headers: {
       "Content-Type": "multipart/form-data",
-      Authorization: `Token ${token}`, // Pass the token for authentication
+      Authorization: `Token ${token}`,
     },
   };
 
   try {
-    const response = await axios.post(`http://127.0.0.1:8000/api/v1/waste-management/events/`, data, config);
+    const response = await axios.post(
+      "http://127.0.0.1:8000/api/v1/waste-management/events/",
+      data,
+      config
+    );
     return response;
   } catch (error) {
+    console.error("Upload Error:", error);
     throw error;
   }
 };
+
 
 export const getEventReport = async (id) => {
 
@@ -128,4 +143,38 @@ export const getEventReport = async (id) => {
 };
 
 
+export const getWaste = async (endpoint) => {
+  const token = localStorage.getItem("authToken");
+  const config = {
+    headers: {
+      Authorization: `Token ${token}`, // Pass the token for authentication
+    },
+  };
 
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/v1/waste-management/${endpoint}`, config);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+
+}
+
+
+export const addWasteData = async (endpoint, data) => {
+
+  const token = localStorage.getItem("authToken");
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Token ${token}`, // Pass the token for authentication
+    },
+  };
+
+  try {
+    const response = await axios.post(`http://127.0.0.1:8000/api/v1/waste-management/${endpoint}`, data, config);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -10,7 +10,7 @@ export default function PostOfficeGridList({postOffices}) {
             id:index,
             Pincode:office['pincode'],
             PostName:office['name'],
-            ContactNumber:office['contactNo'],
+            ContactNumber:office['contact_no'],
             Address:office['address'],
             Division:office['division_pincode']
 

@@ -94,7 +94,7 @@ const EventManagement = () => {
   const [grError, setGrError] = useState(false);
 
 
-  
+
   const [grDetails, setGrDetails] = useState({
     grTitle: "",
     grDescription: "",
@@ -106,34 +106,52 @@ const EventManagement = () => {
     e.preventDefault();
     setGrFile(e.dataTransfer.files[0]);
   };
-
   const handleGRFileChange = (e) => {
-    setGrFile(e.target.files[0]);
+    const file = e.target.files[0];
+    // if (file.type !== "application/pdf") {
+    //   setGrError(true);
+    //   return;
+    // }
+
+
+    setGrFile(file);
   };
+
+
 
   const handleGRInputChange = (e) => {
     const { name, value } = e.target;
     setGrDetails({ ...grDetails, [name]: value });
   };
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleSubmitGRReport = async (e) => {
     e.preventDefault();
+
     if (!grFile || !grDetails.grTitle || !grDetails.grDescription) {
       setGrError(true);
       return;
     }
-  
-    const formData = new FormData();
-    formData.append("title", grDetails.grTitle);
-    formData.append("description", grDetails.grDescription);
-    formData.append("attachment", grFile);
-    formData.append("date_time", new Date().toISOString());
-    formData.append("pincode", login?.user?.pincode);
-  
+    // console.log("gerror:",grFile);
+
+
+    const data = new FormData();
+    data.append("title", grDetails.grTitle);
+    data.append("description", grDetails.grDescription);
+    data.append("attachment", grFile);
+    data.append("date_time", new Date().toISOString());
+    data.append("pincode", login?.user?.pincode);
+    console.log(data.has("attachment"));
+    // Log all key-value pairs in the FormData
+    for (const [key, value] of data.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+
+
     try {
       setLoading(true);
-      const res = await addEvent(formData); // Ensure `addEvent` supports `FormData`
+      const res = await addEvent(data); // Ensure `addEvent` supports `FormData`
       console.log("New event response:", res);
       setGrDetails({ grTitle: "", grDescription: "" });
       setGrFile(null);
@@ -144,7 +162,7 @@ const EventManagement = () => {
       setLoading(false);
     }
   };
-  
+
 
   // ************ Dialog ******************
   function FullScreenDialog() {
@@ -238,25 +256,25 @@ const EventManagement = () => {
       }
     };
 
-    const[reports,setReports]=useState([])
-    const getReports=async()=>{
-      try{
-        const res=await getEventReport(currentEvent.id)
-        console.log("event report",res.data)
-        if(res.status ===200){
+    const [reports, setReports] = useState([])
+    const getReports = async () => {
+      try {
+        const res = await getEventReport(currentEvent.id)
+        console.log("event report", res.data)
+        if (res.status === 200) {
           setReports(res.data.data)
         }
-      }catch(e){
-        console.log(" geting report error: ",e);
-        
+      } catch (e) {
+        console.log(" geting report error: ", e);
+
       }
     }
-    useEffect(()=>{
-      if(login.is_divisional && open){
+    useEffect(() => {
+      if (login.is_divisional && open) {
         getReports();
       }
 
-    },[currentEvent])
+    }, [currentEvent])
 
     return (
       <React.Fragment>
@@ -393,58 +411,58 @@ const EventManagement = () => {
 
                 {login.is_divisional && (
                   <Box
-                  sx={{
-                    padding: "20px",
-                    borderRadius: "8px",
-                    boxShadow: 4,
-                    backgroundColor: "background.paper",
-                    mb: 5,
-                  }}
-                >
-                  {reports.length ==0 ?"No Reports till submitted"
-                  :<div style={{ height: 350, width: '100%' }}>
-                  <DataGrid
-                    columns={[
-                      { field: 'Id' },
-                      { field: 'Pincode', hideable: false },
-                      { field: 'Title' },
-                      { field: 'Decription' },
-                      { field: 'Date_Time' },
-                      { field: 'Location' },
-                      {
-                        field: 'Report',
-                        headerName: 'Report',
-                        width: 150,
-                        renderCell: (params) => (
-                          <a
-                            href={params.row.Report}
-                            download={params.row.Title || "report.pdf"}
-                            style={{ textDecoration: 'none', color: 'blue' }}
-                          >
-                            Download
-                          </a>
-                        ),
-                      },
-                    ]}
-                    rows={reports.map((report,index)=>{
-                      return {
-                          id:report['id'],
-                          Pincode:report['pincode'],
-                          Title:report['name'],
-                          Decription:report['report_description'],
-                          Date_Time:report['date_time'],
-                          Location:report['atLocation'],
-                          Report: report['attached_report'],
-                          
-              
-                      }
-                  })}
-                    slots={{
-                      toolbar: GridToolbar,
+                    sx={{
+                      padding: "20px",
+                      borderRadius: "8px",
+                      boxShadow: 4,
+                      backgroundColor: "background.paper",
+                      mb: 5,
                     }}
-                  />
-                </div>}
-                </Box>
+                  >
+                    {reports.length == 0 ? "No Reports till submitted"
+                      : <div style={{ height: 350, width: '100%' }}>
+                        <DataGrid
+                          columns={[
+                            { field: 'Id' },
+                            { field: 'Pincode', hideable: false },
+                            { field: 'Title' },
+                            { field: 'Decription' },
+                            { field: 'Date_Time' },
+                            { field: 'Location' },
+                            {
+                              field: 'Report',
+                              headerName: 'Report',
+                              width: 150,
+                              renderCell: (params) => (
+                                <a
+                                  href={params.row.Report}
+                                  download={params.row.Title || "report.pdf"}
+                                  style={{ textDecoration: 'none', color: 'blue' }}
+                                >
+                                  Download
+                                </a>
+                              ),
+                            },
+                          ]}
+                          rows={reports.map((report, index) => {
+                            return {
+                              id: report['id'],
+                              Pincode: report['pincode'],
+                              Title: report['name'],
+                              Decription: report['report_description'],
+                              Date_Time: report['date_time'],
+                              Location: report['atLocation'],
+                              Report: report['attached_report'],
+
+
+                            }
+                          })}
+                          slots={{
+                            toolbar: GridToolbar,
+                          }}
+                        />
+                      </div>}
+                  </Box>
                 )}
 
 
@@ -554,7 +572,7 @@ const EventManagement = () => {
               {/* <TableCell>End Date</TableCell> */}
               <TableCell>Pincode</TableCell>
               <TableCell>Attachment</TableCell>
-              <TableCell>{login.is_divisional? "View Responses" :"Add Report"}</TableCell>
+              <TableCell>{login.is_divisional ? "View Responses" : "Add Report"}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -575,7 +593,7 @@ const EventManagement = () => {
                   </a>
                 </TableCell>
                 <TableCell><Button variant="outlined" size="small" onClick={() => { handleClickOpen(event) }}>
-                 {login.is_divisional? "View" :"ADD"}
+                  {login.is_divisional ? "View" : "ADD"}
                 </Button></TableCell>
               </TableRow>
             ))}

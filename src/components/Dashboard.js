@@ -13,7 +13,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AnalyticsIcon from '@mui/icons-material/BarChart';
 import { Analytics } from './analytics/Analytics';
 import logo from '../assets/logo.webp';
-
+import WasteManagement from './wastemanagement/WasteManagement'
 import Typography from '@mui/material/Typography';
 import { Container, Grid2 } from '@mui/material';
 import EventManagement from './events/EventManagement';
@@ -57,6 +57,7 @@ export default function DashboardLayoutBasic({ user, onLogout }) {
     { kind: 'header', title: 'Main items' },
     { segment: 'home', title: 'Home', icon: <DashboardIcon />, action: () => navigate('/home') },
     { segment: 'eventmanagement', title: 'Event Management', icon: <LayersIcon />, action: () => navigate('/eventmanagement') },
+    { segment: 'wastemanagement', title: 'Waste Management', icon: <LayersIcon />, action: () => navigate('/wastemanagement') },
     { segment: 'analytics', title: 'Analytics', icon: <AnalyticsIcon />, action: () => navigate('/analytics') },
     { segment: 'settings', title: 'Settings', icon: <SettingsIcon />, action: () => navigate('/settings') },
     { kind: 'header', title: `Welcome, ${user?.username || 'Guest'}` },
@@ -111,6 +112,7 @@ export default function DashboardLayoutBasic({ user, onLogout }) {
           <Routes>
             <Route path="/home" element={<Home user={user} />} />
             <Route path="/eventmanagement" element={<EventManagement />} />
+            <Route path="/wastemanagement" element={<WasteManagement />} />
             <Route path="/analytics" element={<Analytics user={user} />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
